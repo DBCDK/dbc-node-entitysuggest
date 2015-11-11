@@ -17,9 +17,10 @@
     "type": "git",
     "url": "https://github.com/DBCDK/dbc-node-entitysuggest"
   },
-  "author": "DBC A/S",
-  "license": "ISC",
+  "author": "dbcdk",
+  "license": "GPL-3.0",
   "dependencies": {
+    "lodash": "^3.10.1",
     "request": "^2.60.0"
   },
   "devDependencies": {
