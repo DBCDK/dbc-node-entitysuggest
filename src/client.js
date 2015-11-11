@@ -30,11 +30,12 @@ function sendRequest(logger, uri, qs) {
   });
 }
 
+
 /**
- * Setting the necessary parameters for the client to be usable.
+ * Initializes client and return api functions
  *
- * @param {Object} config Config object with the necessary parameters to use
- * the webservice
+ * @param {Object} config Requires endpoint and port
+ * @returns {{getSubjectSuggestions, getCreatorSuggestions, getLibrarySuggestions}}
  */
 export function init(config) {
   if (!config) {
@@ -56,4 +57,4 @@ export function init(config) {
     getCreatorSuggestions: curry(sendRequest)(logger)(uri + '/creator'),
     getLibrarySuggestions: curry(sendRequest)(logger)(uri + '/library')
   };
-};
+}
