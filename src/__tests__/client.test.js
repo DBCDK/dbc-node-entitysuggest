@@ -1,7 +1,7 @@
 'use strict';
 /* eslint-disable */
 
-import * as PopSuggest from '../client.js';
+import * as EntitySuggest from '../client.js';
 import {assert, expect} from 'chai';
 import sinon from 'sinon';
 import request from 'request'
@@ -25,20 +25,23 @@ describe('Test methods in client.js', () => {
   });
 
   it('Test init method', () => {
-    expect(PopSuggest.init).is.not.null;
+    expect(EntitySuggest.init).is.not.null;
 
-    const init = PopSuggest.init;
+    const init = EntitySuggest.init;
     assert.isFunction(init, 'init is a function');
 
-    expect(init).to.throw('no config object provided');
+    expect(init).to.throw(Error);
 
     let config = {};
-    expect(() => init(config)).to.throw('no endpoint provided in config');
+    expect(() => init(config)).to.throw(Error);
 
     config = {endpoint: 'test'};
-    expect(() => init(config)).to.throw('no port provided in config');
+    expect(() => init(config)).to.throw(Error);
 
-    config = {endpoint: 'test', port: 1234};
+    config = {endpoint: 'test', method: 'method'};
+    expect(() => init(config)).to.throw(Error);
+
+    config = {endpoint: 'test', method: 'method', port: 1234};
     expect(() => init(config)).to.not.throw(Error);
 
     const methods = init(config);
@@ -48,68 +51,68 @@ describe('Test methods in client.js', () => {
   });
 
   it('Test getSubjectSuggestions Methods', (done) => {
-    let suggest = PopSuggest.init({
+    let suggest = EntitySuggest.init({
       method: 'entity-suggest',
       endpoint: 'http://xp-p02.dbc.dk',
       port: 8015
     });
 
-    const Promise = suggest.getSubjectSuggestions({query: 'display.title', rs: 5});
-    return Promise.then((data) => {
-      assert(request.get.firstCall.calledWith({
-        uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/subject',
-        qs: {query: 'display.title', rs: 5}
-      }));
-      assert(request.get.calledOnce);
-      assert.isObject(data, 'got object');
-      assert.property(data, 'response');
-      done();
-    }).catch((err) => {
+    suggest.getSubjectSuggestions({query: 'display.title', rs: 5})
+      .then((data) => {
+        assert(request.get.firstCall.calledWith({
+          uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/subject',
+          qs: {query: 'display.title', rs: 5}
+        }));
+        assert(request.get.calledOnce);
+        assert.isObject(data, 'got object');
+        assert.property(data, 'response');
+        done();
+      }).catch((err) => {
         done(err);
       }
     );
   });
 
   it('Test getCreatorSuggestions Methods', (done) => {
-    let suggest = PopSuggest.init({
+    let suggest = EntitySuggest.init({
       method: 'entity-suggest',
       endpoint: 'http://xp-p02.dbc.dk',
       port: 8015
     });
 
-    const Promise = suggest.getCreatorSuggestions({query: 'display.title', rs: 5});
-    return Promise.then((data) => {
-      assert(request.get.calledWith({
-        uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/creator',
-        qs: {query: 'display.title', rs: 5}
-      }));
-      assert.isObject(data, 'got object');
-      assert.property(data, 'response');
-      done();
-    }).catch((err) => {
+    suggest.getCreatorSuggestions({query: 'display.title', rs: 5})
+      .then((data) => {
+        assert(request.get.calledWith({
+          uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/creator',
+          qs: {query: 'display.title', rs: 5}
+        }));
+        assert.isObject(data, 'got object');
+        assert.property(data, 'response');
+        done();
+      }).catch((err) => {
         done(err);
       }
     );
   });
 
   it('Test getLibrarySuggestions Methods', (done) => {
-    let suggest = PopSuggest.init({
+    let suggest = EntitySuggest.init({
       method: 'entity-suggest',
       endpoint: 'http://xp-p02.dbc.dk',
       port: 8015
     });
 
-    const Promise = suggest.getLibrarySuggestions({query: 'display.title', rs: 5});
-    return Promise.then((data) => {
-      assert(request.get.calledWith({
-        uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/library',
-        qs: {query: 'display.title', rs: 5}
-      }));
-      assert.isObject(data, 'got object');
-      assert.isObject(data, 'got object');
-      assert.property(data, 'response');
-      done();
-    }).catch((err) => {
+    suggest.getLibrarySuggestions({query: 'display.title', rs: 5})
+      .then((data) => {
+        assert(request.get.calledWith({
+          uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/library',
+          qs: {query: 'display.title', rs: 5}
+        }));
+        assert.isObject(data, 'got object');
+        assert.isObject(data, 'got object');
+        assert.property(data, 'response');
+        done();
+      }).catch((err) => {
         done(err);
       }
     );
