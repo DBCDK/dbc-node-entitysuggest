@@ -46,6 +46,10 @@ export function init(config) {
     throw new Error('no endpoint provided in config');
   }
 
+  if (!config.method) {
+    throw new Error('no method provided in config');
+  }
+
   if (!config.port) {
     throw new Error('no port provided in config');
   }
