@@ -61,7 +61,7 @@ describe('Test methods in client.js', () => {
       .then((data) => {
         assert(request.get.firstCall.calledWith({
           uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/subject',
-          qs: {query: 'display.title', rs: 5}
+          qs: {query: 'display.title', rs: 5, lt: 'folkebibliotek'}
         }));
         assert(request.get.calledOnce);
         assert.isObject(data, 'got object');
@@ -84,7 +84,7 @@ describe('Test methods in client.js', () => {
       .then((data) => {
         assert(request.get.calledWith({
           uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/creator',
-          qs: {query: 'display.title', rs: 5}
+          qs: {query: 'display.title', rs: 5, lt: 'folkebibliotek'}
         }));
         assert.isObject(data, 'got object');
         assert.property(data, 'response');
@@ -102,11 +102,11 @@ describe('Test methods in client.js', () => {
       port: 8015
     });
 
-    suggest.getLibrarySuggestions({query: 'display.title', rs: 5})
+    suggest.getLibrarySuggestions({query: 'display.title', rs: 5, lt: 'testbibliotek'})
       .then((data) => {
         assert(request.get.calledWith({
           uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/library',
-          qs: {query: 'display.title', rs: 5}
+          qs: {query: 'display.title', rs: 5, lt: 'testbibliotek'}
         }));
         assert.isObject(data, 'got object');
         assert.isObject(data, 'got object');
