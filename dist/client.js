@@ -20,9 +20,15 @@ var _lodash = require('lodash');
  * @param {string} service
  * @return {Promise}
  */
-function sendRequest(logger, uri, qs) {
+function sendRequest(defaults, method, query) {
+  var url = defaults.url;
+  var logger = defaults.logger;
+  var lt = defaults.lt;
+
   return new Promise(function (resolve, reject) {
-    logger.log('suggest client request with params', qs);
+    var uri = url + '/' + method;
+    var qs = (0, _lodash.extend)({ lt: lt }, query);
+    logger.log('entity-suggest client request with params', qs);
     _request2['default'].get({ uri: uri, qs: qs }, function (err, response, body) {
       if (err) {
         logger.error('suggest client responded with an error', { err: err });
@@ -32,7 +38,14 @@ function sendRequest(logger, uri, qs) {
         reject(response);
       } else {
         var data = JSON.parse(body);
-        resolve(data);
+        var params = {
+          service: 'entity-suggest',
+          method: method,
+          qs: qs,
+          url: url
+        };
+        var responseData = (0, _lodash.extend)(data, { params: params });
+        resolve(responseData);
         logger.info('suggest client responded with data', { path: uri, params: qs, data: data });
       }
     });
@@ -55,19 +68,19 @@ function init(config) {
     throw new Error('no endpoint provided in config');
   }
 
-  if (!config.method) {
-    throw new Error('no method provided in config');
-  }
-
   if (!config.port) {
     throw new Error('no port provided in config');
   }
-  var uri = config.endpoint + ':' + config.port + '/' + config.method;
-  var logger = config.logger || console;
+
+  var defaults = {
+    lt: config.libraryType || 'folkebibliotek',
+    url: config.endpoint + ':' + config.port + '/entity-suggest',
+    logger: config.logger || console
+  };
 
   return {
-    getSubjectSuggestions: (0, _lodash.curry)(sendRequest)(logger)(uri + '/subject'),
-    getCreatorSuggestions: (0, _lodash.curry)(sendRequest)(logger)(uri + '/creator'),
-    getLibrarySuggestions: (0, _lodash.curry)(sendRequest)(logger)(uri + '/library')
+    getSubjectSuggestions: (0, _lodash.curry)(sendRequest)(defaults)('subject'),
+    getCreatorSuggestions: (0, _lodash.curry)(sendRequest)(defaults)('creator'),
+    getLibrarySuggestions: (0, _lodash.curry)(sendRequest)(defaults)('library')
   };
 }
