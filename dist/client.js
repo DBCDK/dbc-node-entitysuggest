@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.init = init;
+exports['default'] = EntitySuggestClient;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -59,7 +59,7 @@ function sendRequest(defaults, method, query) {
  * @returns {{getSubjectSuggestions, getCreatorSuggestions, getLibrarySuggestions}}
  */
 
-function init(config) {
+function EntitySuggestClient(config) {
   if (!config) {
     throw new Error('no config object provided');
   }
@@ -84,3 +84,5 @@ function init(config) {
     getLibrarySuggestions: (0, _lodash.curry)(sendRequest)(defaults)('library')
   };
 }
+
+module.exports = exports['default'];

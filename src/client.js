@@ -48,7 +48,7 @@ function sendRequest(defaults, method, query) {
  * @param {Object} config Requires endpoint and port
  * @returns {{getSubjectSuggestions, getCreatorSuggestions, getLibrarySuggestions}}
  */
-export function init(config) {
+export default function EntitySuggestClient(config) {
   if (!config) {
     throw new Error('no config object provided');
   }

@@ -1,7 +1,7 @@
 'use strict';
 /* eslint-disable */
 
-import * as EntitySuggest from '../client.js';
+import EntitySuggest from '../client.js';
 import {assert, expect} from 'chai';
 import sinon from 'sinon';
 import request from 'request'
@@ -25,9 +25,9 @@ describe('Test methods in client.js', () => {
   });
 
   it('Test init method', () => {
-    expect(EntitySuggest.init).is.not.null;
+    expect(EntitySuggest).is.not.null;
 
-    const init = EntitySuggest.init;
+    const init = EntitySuggest;
     assert.isFunction(init, 'init is a function');
 
     expect(init).to.throw(Error);
@@ -51,7 +51,7 @@ describe('Test methods in client.js', () => {
   });
 
   it('Test getSubjectSuggestions Methods', (done) => {
-    let suggest = EntitySuggest.init({
+    let suggest = EntitySuggest({
       method: 'entity-suggest',
       endpoint: 'http://xp-p02.dbc.dk',
       port: 8015
@@ -74,7 +74,7 @@ describe('Test methods in client.js', () => {
   });
 
   it('Test getCreatorSuggestions Methods', (done) => {
-    let suggest = EntitySuggest.init({
+    let suggest = EntitySuggest({
       method: 'entity-suggest',
       endpoint: 'http://xp-p02.dbc.dk',
       port: 8015
@@ -96,7 +96,7 @@ describe('Test methods in client.js', () => {
   });
 
   it('Test getLibrarySuggestions Methods', (done) => {
-    let suggest = EntitySuggest.init({
+    let suggest = EntitySuggest({
       method: 'entity-suggest',
       endpoint: 'http://xp-p02.dbc.dk',
       port: 8015
