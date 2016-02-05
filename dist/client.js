@@ -68,13 +68,9 @@ function EntitySuggestClient(config) {
     throw new Error('no endpoint provided in config');
   }
 
-  if (!config.port) {
-    throw new Error('no port provided in config');
-  }
-
   var defaults = {
     lt: config.libraryType || 'folkebibliotek',
-    url: config.endpoint + ':' + config.port + '/entity-suggest',
+    url: config.endpoint,
     logger: config.logger || console
   };
 
