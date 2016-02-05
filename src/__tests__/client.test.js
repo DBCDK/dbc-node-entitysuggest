@@ -35,13 +35,7 @@ describe('Test methods in client.js', () => {
     let config = {};
     expect(() => init(config)).to.throw(Error);
 
-    config = {endpoint: 'test'};
-    expect(() => init(config)).to.throw(Error);
-
     config = {endpoint: 'test', method: 'method'};
-    expect(() => init(config)).to.throw(Error);
-
-    config = {endpoint: 'test', method: 'method', port: 1234};
     expect(() => init(config)).to.not.throw(Error);
 
     const methods = init(config);
@@ -53,17 +47,16 @@ describe('Test methods in client.js', () => {
   it('Test getSubjectSuggestions Methods', (done) => {
     let suggest = EntitySuggest({
       method: 'entity-suggest',
-      endpoint: 'http://xp-p02.dbc.dk',
-      port: 8015
+      endpoint: 'http://xp-p02.dbc.dk/ms/entity-suggest/v1'
     });
 
     suggest.getSubjectSuggestions({query: 'display.title', rs: 5})
       .then((data) => {
         assert(request.get.firstCall.calledWith({
-          uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/subject',
+          uri: 'http://xp-p02.dbc.dk/ms/entity-suggest/v1/subject',
           qs: {query: 'display.title', rs: 5, lt: 'folkebibliotek'}
-        }));
-        assert(request.get.calledOnce);
+        }), 'request get called with specific object');
+        assert(request.get.calledOnce, 'requests gets called once');
         assert.isObject(data, 'got object');
         assert.property(data, 'response');
         done();
@@ -76,14 +69,13 @@ describe('Test methods in client.js', () => {
   it('Test getCreatorSuggestions Methods', (done) => {
     let suggest = EntitySuggest({
       method: 'entity-suggest',
-      endpoint: 'http://xp-p02.dbc.dk',
-      port: 8015
+      endpoint: 'http://xp-p02.dbc.dk/ms/entity-suggest/v1'
     });
 
     suggest.getCreatorSuggestions({query: 'display.title', rs: 5})
       .then((data) => {
         assert(request.get.calledWith({
-          uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/creator',
+          uri: 'http://xp-p02.dbc.dk/ms/entity-suggest/v1/creator',
           qs: {query: 'display.title', rs: 5, lt: 'folkebibliotek'}
         }));
         assert.isObject(data, 'got object');
@@ -98,14 +90,13 @@ describe('Test methods in client.js', () => {
   it('Test getLibrarySuggestions Methods', (done) => {
     let suggest = EntitySuggest({
       method: 'entity-suggest',
-      endpoint: 'http://xp-p02.dbc.dk',
-      port: 8015
+      endpoint: 'http://xp-p02.dbc.dk/ms/entity-suggest/v1'
     });
 
     suggest.getLibrarySuggestions({query: 'display.title', rs: 5, lt: 'testbibliotek'})
       .then((data) => {
         assert(request.get.calledWith({
-          uri: 'http://xp-p02.dbc.dk:8015/entity-suggest/library',
+          uri: 'http://xp-p02.dbc.dk/ms/entity-suggest/v1/library',
           qs: {query: 'display.title', rs: 5, lt: 'testbibliotek'}
         }));
         assert.isObject(data, 'got object');
